@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body><form id="forms">
+     name: <input type="text"  id="inp">
+ <br>
+      contact: <input type="text"  id="inpc" > 
+      <input type="submit" id="sub">
+    
+</form>
+    <script type="text/javascript">
+      
+      let  submit =document.getElementById("forms")
+      let sum;
+      submit.addEventListener('submit', addItem);
+      function addItem(e){
+          e.preventDefault()
+          let  name =document.getElementById("inp").value
+          let contact= document.getElementById("inpc").value
+        console.log(name+contact)
+        localStorage.setItem(name,contact)}
+   </script>
+</body>
+</html>
