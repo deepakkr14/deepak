@@ -22,8 +22,21 @@
           e.preventDefault()
           let  name =document.getElementById("inp").value
           let contact= document.getElementById("inpc").value
-        console.log(name+contact)
-        localStorage.setItem(name,contact)}
+          let loc=localStorage.getItem(name)
+        // console.log(name+contact)
+        localStorage.setItem(name,contact)
+        let obj={
+            name:"deepak",
+            class:5
+        }
+        let str=JSON.stringify(obj)
+        localStorage.setItem("person",str)
+        console.log(localStorage.getItem("person"))
+        let destring=JSON.parse(localStorage.getItem("person"))
+        // document.getElementById("forms").innerHTML = obj.name;
+    }
    </script>
 </body>
 </html>
+<!-- JSON.stringfy -->
+<!-- JSON.parse -->
