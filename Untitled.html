@@ -7,34 +7,51 @@
     <title>Document</title>
 </head>
 <body><form id="forms">
-     name: <input type="text"  id="inp">
- <br>
-      contact: <input type="text"  id="inpc" > 
+     name: <input type="text"  id="name">
+     <br> <br>
+      email: <input type="email"  id="mail" > 
+ <br> <br>
+      mobile no: <input type="number"  id="mob" > 
+
       <input type="submit" id="sub">
-    
+    <br>
+     <ul id="lists"></ul>
 </form>
+     
+
     <script type="text/javascript">
       
       let  submit =document.getElementById("forms")
-      let sum;
+      
       submit.addEventListener('submit', addItem);
       function addItem(e){
           e.preventDefault()
-          let  name =document.getElementById("inp").value
-          let contact= document.getElementById("inpc").value
-          let loc=localStorage.getItem(name)
-        // console.log(name+contact)
-        localStorage.setItem(name,contact)
-        let obj={
-            name:"deepak",
-            class:5
+          let  name =document.getElementById("name").value
+          let contact= document.getElementById("mail").value
+          let phone= document.getElementById("mob").value
+
+        //   let loc=localStorage.getItem(name)
+        // console.log(name+ "-"+contact +" - " +phone)
+        // document.getElementById("forms").innerHTML = name+ "-"+ contact +" - " +email;
+        let nex=document.createElement("li") 
+         let body=document.createTextNode(name+ "-"+contact +" - " +phone) 
+         nex.appendChild(body)
+         let next=document.createElement("br")  
+         submit.append(nex);                                       
+         let obj={
+             name:name,
+             phone:phone,
+             mail:contact
+
+            }
+            let str=JSON.stringify(obj)
+            localStorage.setItem(name,str)
+            // console.log(localStorage.getItem(name))
+            let destring=JSON.parse(localStorage.getItem(name))
+            console.log(destring)
         }
-        let str=JSON.stringify(obj)
-        localStorage.setItem("person",str)
-        console.log(localStorage.getItem("person"))
-        let destring=JSON.parse(localStorage.getItem("person"))
-        // document.getElementById("forms").innerHTML = obj.name;
-    }
+       
+        
    </script>
 </body>
 </html>
