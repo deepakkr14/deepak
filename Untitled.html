@@ -7,11 +7,11 @@
     <title>Document</title>
 </head>
 <body><form id="forms">
-     name: <input type="text"  id="name">
+     name: <input type="text"  id="name" value="dee">
      <br> <br>
-      email: <input type="email"  id="mail" > 
+      email: <input type="email"  id="mail" value="ads@ff.cdo" > 
  <br> <br>
-      mobile no: <input type="number"  id="mob" > 
+      mobile no: <input type="number"  id="mob" value="121133"> 
 
       <input type="submit" id="sub">
     <br>
@@ -33,21 +33,36 @@
         //   let loc=localStorage.getItem(name)
         // console.log(name+ "-"+contact +" - " +phone)
         // document.getElementById("forms").innerHTML = name+ "-"+ contact +" - " +email;
-        let nex=document.createElement("li") 
+        let entries=document.createElement("li") 
          let body=document.createTextNode(name+ "-"+contact +" - " +phone) 
          let button =document.createElement("button")
         
-         let next=document.createElement("br")  
+         let entriest=document.createElement("br")  
          button.innerText="delete"
-         nex.appendChild(body)
-         nex.appendChild(button)
-         submit.append(nex);  
+
+          let button2 =document.createElement("button")
+         button2.innerText="edit"
+
+          
+         entries.appendChild(body)
+         entries.appendChild(button) 
+         entries.appendChild(button2) 
+
+         submit.append(entries);  
          
+         button2.addEventListener("click",edits)
+         function edits(e){
+          localStorage.removeItem(name);
+          entries.remove();
+          
+         populateFormFields(name, contact, phone);
+}
+
          button.addEventListener("click",deletes)
          function deletes(e){
           localStorage.removeItem(name);
-          //  submit.removeChild(nex);
-            nex.remove();
+          //  submit.removeChild(entries);
+            entries.remove();
          }
          let obj={
              name:name,
@@ -62,7 +77,11 @@
             console.log(destring)
             console.log(submit.children)
         }
-       
+       function populateFormFields(name, contact, phone) {
+            document.getElementById("name").value = name;
+            document.getElementById("mail").value = contact;
+            document.getElementById("mob").value = phone;
+        }
         
    </script>
 </body>
