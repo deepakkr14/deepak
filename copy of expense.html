@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
+    <title>Document</title>
+</head>
+<body>
+     
+<form  class="form-horizontal" id="forms">
+    <label for="Amount">Choose Expense Amount:</label>
+    <input type="number" id="name"> 
+
+  <label for="desc"> Choose Description</label>
+<input type="text"  id="mail">  
+
+<label for="cat">Choose Category:</label>
+
+
+<select  class="form-horizontal" id="mob">
+<option value="food">food</option>
+<option value="entertainment">entertainment</option>
+<option value="movies">movies</option>
+<option value="party">party</option>
+<option value="grocries">grocries</option>
+<option value="bills">bills</option>
+<option value="rent">rent</option>
+<option value="fuel">fuel</option>
+<option value="education">education</option>
+
+
+</select>
+<input type="submit" value="Add Expenses" id="sub">
+<br>
+<div style="margin-left:80px;">
+ <ul   id="lists"></ul></div>
+</form>
+</div>
+
+
+
+
+
+    <script type="text/javascript">
+      
+      let  submit =document.getElementById("forms")
+      
+      submit.addEventListener('submit', addItem);
+      function addItem(e){
+          e.preventDefault()
+          let  name =document.getElementById("name").value
+          let contact= document.getElementById("mail").value
+          let phone= document.getElementById("mob").value
+
+       
+        let entries=document.createElement("li") 
+         let body=document.createTextNode(name+ "-"+contact +" - " +phone) 
+         let button =document.createElement("button")
+        
+         let entriest=document.createElement("br")  
+         button.innerText="Delete Expense"
+
+          let button2 =document.createElement("button")
+         button2.innerText="Edit Expense"
+
+          
+         entries.appendChild(body)
+         entries.appendChild(button) 
+         entries.appendChild(button2) 
+
+         submit.append(entries);  
+         
+         button2.addEventListener("click",edits)
+         function edits(e){
+          localStorage.removeItem(name);
+          entries.remove();
+          
+         populateFormFields(name, contact, phone);
+}
+
+         button.addEventListener("click",deletes)
+         function deletes(e){
+          localStorage.removeItem(name);
+           submit.removeChild(entries);
+            entries.remove();
+         }
+         let obj={
+             name:name,
+             phone:phone,
+             mail:contact
+
+            }
+            let str=JSON.stringify(obj)
+            localStorage.setItem(name,str)
+            console.log(localStorage.getItem(name))
+            let destring=JSON.parse(localStorage.getItem(name))
+            console.log(destring)
+            console.log(submit.children)
+        }
+       function populateFormFields(name, contact, phone) {
+            document.getElementById("name").value = name;
+            document.getElementById("mail").value = contact;
+            document.getElementById("mob").value = phone;
+        }
+        
+   </script>
+</body>
+</html>
