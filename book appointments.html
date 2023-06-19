@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+</head>
+<body> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+<div>
+    <form id="forms">
+        name: <input type="text"  id="name" value="dee">
+        
+         email: <input type="email"  id="mail" value="ads@ff.cdo" > 
+   
+         mobile no: <input type="number"  id="mob" value="121133"> 
+   
+         <input type="submit" id="sub">
+       <br>
+        <h1 id="lists"></h1>
+        
+   </form>      
+</div>
+<script>
+    let submit=document.getElementById("forms")
+    submit.addEventListener('submit', addItem);
+      function addItem(e){
+          e.preventDefault()
+          let  name =document.getElementById("name").value
+          let contact= document.getElementById("mail").value
+          let phone= document.getElementById("mob").value
+
+          let obj={
+             name,
+             phone,
+             contact
+            }
+            axios.post("https://crudcrud.com/api/4957efadd090441d83249784fb42c901/almuni",obj )
+            .then((obj)=> console.log(obj))
+            .catch((err) => console.log("err"));
+
+            // axios.get("https://crudcrud.com/api/4957efadd090441d83249784fb42c901/almuni")
+            // .then((obj)=>  document.getElementById("lists").append(JSON.stringify(obj)))
+            // .catch((err) => console.log(err));
+           
+            // console.log(body)
+      }
+
+
+
+</script>
+
+</body>
+</html>
