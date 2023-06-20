@@ -58,8 +58,8 @@
             function showme(obj) {
             //   list items
               const li=document.createElement("li");
-              li.textContent=obj.name +":"+ obj.phone +":"+obj.contact;
-              
+              li.textContent=obj.name +":"+ obj.phone +":"+obj.contact +":"+ obj._id ;
+             
               
             //  delete btm 
               const deletebtn=document.createElement("input")
@@ -68,7 +68,12 @@
 
             //  delete brn fucntion
              deletebtn.onclick=() => {
-                localStorage.removeItem(obj.email)
+               
+        
+
+                //  delete from crud crud
+                let ids=obj._id;
+                axios.delete("https://crudcrud.com/api/794045df3bf442d09d4fdd54d4a1e311/books" +'/' +ids)
                 ul.removeChild(li)
             }
             //  edit btm
