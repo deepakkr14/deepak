@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let array = [];
+
+        console.log('ja aja aj');
+
+        function lastseen() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    let d = new Date();
+                    // console.log(d)
+                    resolve(d);
+                }, 1000);
+            });
+        }
+
+        function createpost(post1) {
+            return new Promise(async (resolve, reject) => {
+                array.push(post1);
+                await lastseen();
+                resolve(post1);
+            });
+        }
+
+        function showpost() {
+            array.forEach(element => {
+                console.log(element);
+            });
+        }
+
+        function deleteBlog() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (array.length > 0) {
+                        const last = array.pop();
+                        resolve(last);
+                    } else {
+                        reject("ERROR");
+                    }
+                }, 1000);
+            });
+        }
+
+        async function main() {
+            try {
+                await Promise.all([createpost("first"), createpost("second"), createpost("third"), showpost()]);
+                await lastseen();
+                console.log(await lastseen());
+                await deleteBlog();
+                await showpost();
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        main();
+    </script>
+</body>
+</html>
