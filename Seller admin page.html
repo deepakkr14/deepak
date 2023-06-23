@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+
+    <div>
+    <form  onsubmit="addItem(event)">
+        <label for="price">Selling price</label>
+  <input type="number" id="price" value="1000" >
+
+        <label for="item">Product Name</label>
+  <input type="text" id="item" value="dum biryani" >
+
+        <label for="category">Choose a Category</label>
+        <select  id="category" name="price"> 
+            <option value="Electronics">Electronics </option>
+            <option  value="foods">foods </option>
+            <option value="scincare">Scincare</option>
+            <option value="grocery">Grocery</option>
+        </select>
+        <button>Add price</button>
+    </form>
+</div>
+<h1>PRODUCTS:-</h1>
+<h2>Electronics  Items</h2><ul id="Electronics"> </ul>
+
+<h2>Food Items</h2><ul id="foods"> </ul>
+
+<h2>Scincare Items </h2><ul id="scincare"> </ul>
+
+<h2>Grocery Items</h2><ul id="grocery"> </ul>
+
+<script>
+
+function addItem(event) {
+  event.preventDefault()
+
+
+    let price=document.getElementById("price").value
+    let item=document.getElementById("item").value
+    let table=document.getElementById("category").value
+
+    let obj={
+        price,
+        item,
+        table
+    }
+
+axios.post("https://crudcrud.com/api/bb779577ca314433a66993f249d23b26/sellers",obj
+)
+.then((s)=> showinweb(s.data))
+.catch((err)=> console.log(err))
+   
+   
+}
+  document.addEventListener("DOMContentLoaded", () => {
+        axios.get("https://crudcrud.com/api/bb779577ca314433a66993f249d23b26/sellers")
+            .then((obje) => {  for (let i = 0; i < obje.data.length; i++) {
+                    showinweb(obje.data[i]);
+                }
+            })
+            .catch(err => console.log(err));
+
+          })
+
+function showinweb(obj){
+let li=document.createElement("li")
+li.textContent= obj.price +"--"+ obj.table +"--"+obj.item  ;
+let ids=obj._id;
+// delete btn
+let delbtn=document.createElement("input")
+delbtn.type="button"
+delbtn.value="Delete Order"
+
+// let ul=document.getElementById(table)
+let ul=document.getElementById(obj.table)
+li.appendChild(delbtn)
+ul.appendChild(li)
+
+// console.log(ids)
+
+delbtn.onclick=() => {
+        console.log(ids)
+                axios.delete("https://crudcrud.com/api/bb779577ca314433a66993f249d23b26/sellers" +'/' +ids)
+                .then((x)=> console.log("deleted"))
+                .catch((err)=> console.log(err))
+                ul.removeChild(li)
+    }
+
+
+    
+
+    }
+
+    
+
+
+
+</script>
+</body>
+</html>
