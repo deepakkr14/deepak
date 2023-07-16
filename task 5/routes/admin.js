@@ -1,27 +1,11 @@
-const express=require("express");
-const path=require("path")
-const dirnamee=require("../util/path")
+const express = require("express");
+const path = require("path");
+const dirnamee = require("../util/path");
 
-const router=express.Router();
-router.get("/add-products", (req, res) => {
+const router = express.Router();
+const contr = require("../controllers/complete");
+router.get("/add-products", contr.adminget);
 
-  res.sendFile(path.join(dirnamee,'views/','add-products.html'))
-    // res.send(
-    //   `<form action="/admin/product"method="POST"><input type="text" name ="title">
-    //   <input type="text" name ="title2"><button>send</button> </form>`
-    // );
-  });
-  
-  router.post("/product", (req, res) => {
-    console.log(req.body);
-    res.redirect("/");
-  });
+router.post("/product",contr.adminpost );
 
-
-
-
-
-
-
-module.exports=router;
-
+module.exports = router;

@@ -1,9 +1,7 @@
 const express=require("express");
 const path=require("path")
 const  router=express.Router();
-router.get("/", (req, res, next) => {
-    // res.send(`<h1>  You are in the / page <h1>`)
-    res.sendFile(path.join(__dirname,'..','views','shop.html'))
- });
+const contr=require("../controllers/complete")
+router.get("/",contr.shopget );
 
-module.exports=router;
+module.exports=router ;
