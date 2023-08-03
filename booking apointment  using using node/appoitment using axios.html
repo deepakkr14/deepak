@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>booking using axios</title>
+  </head>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <div>
+      <form id="form" onsubmit="addItem(event)">
+        <input type="hidden" name="userId" id="userId"  value=""/>
+        <label for="name">Name</label>
+        <input type="text" id="name" placeholder="enter your name" value="dee" />
+
+        <label for="mail">Email</label>
+        <input type="email" id="mail"  placeholder="enter your mail"  value="ads@ff.cdo" />
+
+        <label for="mob">Phone No</label
+        ><input type="number" id="mob" placeholder="enter your phone no" value="121133" />
+        <button>submit</button>
+        <br />
+        <ul id="lists"></ul>
+      </form>
+    </div>
+    <script src="./index.js"></script>
+    <!-- <script>
+      // let submit=document.getElementById("forms")
+      // submit.addEventListener('submit', addItem);
+      let ul = document.getElementById("lists");
+      function addItem(event) {
+        event.preventDefault();
+        let name = document.getElementById("name").value;
+        let contact = document.getElementById("mail").value;
+        let phone = document.getElementById("mob").value;
+
+        const obj = {
+          name,
+          phone,
+          contact,
+        };
+        //  localStorage.setItem(contact,JSON.stringify(obj))
+        // console.log(obj)
+
+        axios
+          .post("http://localhost:3001", obj)
+          .then((objec) => console.log(objec))
+          .catch((err) => console.log(err));
+
+        //   axios.get("https://crudcrud.com/api/794045df3bf442d09d4fdd54d4a1e311/books")
+        //   .then((obje) => {for(let i=0;i<obje.data.length;i++){
+        //                 showme(obje.data[i])
+        //                      }
+        //   console.log(obje.data)
+        // } )
+        // .catch((err) => console.log(err));
+        // //
+
+        showme(obj);
+      }
+
+      // Use DOMContentLoaded event to load the initial list of users
+      document.addEventListener("DOMContentLoaded", () => {
+        axios
+          .get("http://localhost:3001")
+          .then((obje) => {
+            console.log(obje);
+            for (let i = 0; i < obje.data.length; i++) {
+              showme(obje.data[i]);
+            }
+            console.log(obje);
+          })
+          .catch((err) => console.log(err));
+      });
+
+      function showme(obj) {
+        // list items
+        const li = document.createElement("li");
+        li.textContent = obj.name + ":" + obj.phone + ":" + obj.contact;
+        // ul.innerHTML= `<li> ${obj.name} - ${obj.phone} - ${obj.contact} - ${obj._id} </li>`
+
+        //  delete btm
+        const deletebtn = document.createElement("input");
+        deletebtn.type = "button";
+        deletebtn.value = "delete";
+
+        //  delete brn fucntion
+        deletebtn.onclick = () => {
+          //  delete from crud crud
+          let ids = obj._id;
+          axios.delete(
+            "https://crudcrud.com/api/2569f8d5ba6b4535a2305638ab21cd65/books" +
+              "/" +
+              ids
+          );
+          ul.removeChild(li);
+        };
+        //  edit btm
+        const editbtn = document.createElement("input");
+        editbtn.type = "button";
+        editbtn.value = "edit";
+        //  edit btn function
+        editbtn.onclick = () => {
+          // localStorage.removeItem(obj.email)
+          ul.removeChild(li);
+          let ids = obj._id;
+          axios
+            .get(
+              "https://crudcrud.com/api/2569f8d5ba6b4535a2305638ab21cd65/books" +
+                "/" +
+                ids
+            )
+
+            .then((obje) => {
+              console.log(obje);
+              document.getElementById("name").value = obje.data.name;
+
+              // document.getElementById("name").value=obj.name
+              document.getElementById("mail").value = obje.data.contact;
+              document.getElementById("mob").value = obje.data.phone;
+            })
+            .catch((err) => console.log(err));
+        };
+        li.appendChild(deletebtn);
+        li.appendChild(editbtn);
+        ul.appendChild(li);
+      }
+    </script> -->
+  </body>
+</html>
