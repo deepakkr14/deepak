@@ -6,10 +6,14 @@ exports.postaddNew = (req, res, next) => {
   const password = req.body.password;
   // console.log(req.body);
 
-Users.findByPk(req.body.email)
-.then(resu=>{
-  if(!resu){
-  res.json(resu);
+Users.findAll({
+  where: {
+    email: email
+  }
+})
+.then(result=>{
+  if(result.length>0){
+  res.json(result);
 }
 else{
   Users.create({
@@ -17,7 +21,7 @@ else{
   })
     .then((result) => {
       console.log("user Created");
-      res.json(result);
+      res.status(200).json();
     })
     .catch((err) => console.log(err));
 }})

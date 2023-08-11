@@ -3,7 +3,7 @@ let form = document.getElementById("form");
 // let ul2 = document.getElementById("table 2");
 // let ul3 = document.getElementById("table 3");
 // let ul4 = document.getElementById("table 4");
-const p = document.createElement("p");
+const p = document.querySelector("#message");
 async function singup(event) {
   event.preventDefault();
 
@@ -17,21 +17,26 @@ async function singup(event) {
       email, 
       password
     })
-    
-
-    console.log("page submitted with data" +name,email,password);
     console.log(response.data)
-    if(!response.data){
-         
-          p.innerText=""
-          p.innerText="id already exists"
-          form.appendChild(p)
+    if (response.data.length > 0) {
+      p.innerText = "Email already exists";
+    } else {
+      p.innerText = "User registered successfully";
+    }
 
-    }
-    else{
-      p.innerText=""
-    }
-    form.reset();
+    // console.log("page submitted with data" +name,email,password);
+    // console.log(response.data)
+    // if(response.data){
+         
+    //       p.innerText=""
+    //       p.innerText="id already exists"
+    //       form.appendChild(p)
+
+    // }
+    // else{
+    //   p.innerText=""
+    // }
+    // form.reset();
     // showTables();
   } catch (error) {
     console.log(error);

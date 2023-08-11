@@ -2,16 +2,16 @@ const path = require("path");
 
 const express = require("express");
 
-const shopController = require("../controllers/exp-controller");
+const userController = require("../controllers/exp-controller");
 
 const router = express.Router();
 
 
-// router.get("/getAll", shopController.getEverything);
+// router.get("/getAll", userController.getEverything);
 
-router.post("/users/singup", shopController.postaddNew);
+router.post("/users/singup", userController.postaddNew);
 
-// router.get("/delete/:id", shopController.postDelete);
+// router.get("/delete/:id", userController.postDelete);
 
 
 module.exports = router;
