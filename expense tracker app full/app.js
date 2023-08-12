@@ -6,6 +6,8 @@ const bodyParser = require("body-parser");
 
 const cors = require("cors");
 
+const bcrypt = require('bcryptjs');
+
 const sequelize = require("./util/database");
 
 const app = express();
@@ -22,8 +24,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(Routes);
 
 sequelize
-  // .sync({force:true})
-  .sync()
+  .sync({force:true})
+  // .sync()
   .then((result) => {
     console.log("server started");
 
