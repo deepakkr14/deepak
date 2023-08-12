@@ -13,11 +13,9 @@ async function singup(event) {
       password,
     });
     console.log(response.data);
-    if (
-      response.status === 200 &&
-      response.data.message == "Login successful"
-    ) {
+    if (response.status == 200) {
       alert("Successfully logged in");
+      window.location.href = './copy of expense.html';
     }
   } catch (error) {
     alert(error.response.data.message);

@@ -16,12 +16,14 @@ app.use(cors());
 
 app.use(express.json());
 
-const Routes = require("./routes/user-routes");
+const Uroutes = require("./routes/user-routes");
+const Eroutes = require("./routes/expense-routes");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(Routes);
+app.use(Uroutes);
+app.use(Eroutes);
 
 sequelize
   .sync({force:true})

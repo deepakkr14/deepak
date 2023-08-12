@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs/dist/bcrypt");
-const Users = require("../models/expenses-model");
+const Users = require("../models/user-model");
 const hash = require("bcryptjs");
 
 exports.postaddNew = async (req, res, next) => {
@@ -44,7 +44,11 @@ exports.postlogin = async (req, res, next) => {
 
       if (passwordsMatch) {
         // Correct password, login successful
-        res.status(200).json({ message: "Login successful" });
+        res
+          .status(200)
+          .json({ message: "Login successful" })
+          // redirect("./user/login.html");
+          
       } else {
         // Incorrect password, user not authorized
         res.status(401).json({ message: "User not authorized" });
