@@ -13,30 +13,13 @@ async function singup(event) {
       password,
     });
     console.log(response.data);
-    // if (response.status === 200 && response.data.message == "Login successful") {
-    //     alert("Successfully logged in");
-    //     console.log("success");
-
-    //   } else if (response.status === 404 && response.data.message == "User not found") {
-    //     console.log('not found')
-    //     alert("User not found");
-    //   } else if (response.status === 401 && response.data.message == "User not authorized") {
-    //     console.log('nor auth')
-    //     alert("Wrong credentials");
-    //   } else {
-    //     alert("An error occurred");
-    //   }
-
-
-    if (response.data=="login succesfull") {
-     alert("succesfully logged in")
-    } else if (response.data=="User not found"){
-        alert("User not found")
-    }
-     else {
-        alert("wrong credintials")
+    if (
+      response.status === 200 &&
+      response.data.message == "Login successful"
+    ) {
+      alert("Successfully logged in");
     }
   } catch (error) {
-    console.log(error);
+    alert(error.response.data.message);
   }
 }
