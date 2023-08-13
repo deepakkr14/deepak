@@ -1,5 +1,6 @@
 let form = document.getElementById("forms");
 let table = document.getElementById("table");
+let token=localStorage.getItem('token')
 
 form.addEventListener("submit", addItem);
 async function addItem(e) {
@@ -16,7 +17,7 @@ async function addItem(e) {
         amount: amount,
         description: description,
         category: category,
-      });
+      },{headers:{authorization:token}});
       console.log("New record Created");
       form.reset();
       showAllrecord();
@@ -30,7 +31,7 @@ async function addItem(e) {
         amount,
         description,
         category,
-      });
+      },{headers:{authorization:token}});
       console.log("record Updated");
       form.reset();
       showAllrecord();
@@ -45,8 +46,8 @@ async function addItem(e) {
 document.addEventListener("DOMContentLoaded", showAllrecord());
 async function showAllrecord() {
   let tableBody = document.getElementById("tableBody");
-
-  const response = await axios.get("http://localhost:3005/getAll");
+// console.log(token)
+  const response = await axios.get("http://localhost:3005/getAll",{headers:{Authorization:token}});
 
   tableBody.innerHTML = " ";
   if (response.data.length == 0) {
@@ -106,7 +107,7 @@ async function showAllrecord() {
 
 async function deleteRecord(id) {
   try {
-    const res = await axios.get("http://localhost:3005/delete/" + `${id}`);
+    const res = await axios.get("http://localhost:3005/delete/" + `${id}`,{headers:{authorization:token}});
     tableBody.innerHTML = " ";
     showAllrecord();
   } catch (error) {

@@ -13,7 +13,8 @@ async function singup(event) {
       password,
     });
     console.log(response.data);
-    if (response.status == 200) {
+    localStorage.setItem("token",response.data.token)
+    if (response.status == 201) {
       alert("Successfully logged in");
       window.location.href = './copy of expense.html';
     }

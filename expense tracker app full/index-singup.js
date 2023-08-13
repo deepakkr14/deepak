@@ -21,7 +21,8 @@ async function singup(event) {
     if (response.data.length > 0) {
       p.innerText = "Email already exists";
     } else {
-      p.innerText = "User registered successfully";
+      // p.innerText = "User registered successfully";
+      window.location.href="./log in page.html";
     }
 
     // console.log("page submitted with data" +name,email,password);

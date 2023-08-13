@@ -1,7 +1,8 @@
 const bcrypt = require("bcryptjs/dist/bcrypt");
 const Users = require("../models/user-model");
 const hash = require("bcryptjs");
-
+const jwt = require("jsonwebtoken");
+const secret="secretkey"
 exports.postaddNew = async (req, res, next) => {
   const name = req.body.name;
   const email = req.body.email;
@@ -43,12 +44,15 @@ exports.postlogin = async (req, res, next) => {
       const passwordsMatch = await bcrypt.compare(password, user.password);
 
       if (passwordsMatch) {
-        // Correct password, login successful
-        res
-          .status(200)
-          .json({ message: "Login successful" })
-          // redirect("./user/login.html");
+
+        jwt.sign({userId: user.id },secret,{expiresIn:'300s'},(err,token)=>{
           
+             res.status(201).json({ message: "Login successful" ,token:token});
+          
+        })
+        // Correct password, login successful
+       
+        // redirect("./user/login.html");
       } else {
         // Incorrect password, user not authorized
         res.status(401).json({ message: "User not authorized" });

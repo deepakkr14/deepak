@@ -5,8 +5,8 @@ exports.postaddNew = (req, res, next) => {
   const amount = req.body.amount;
   const description = req.body.description;
   const category = req.body.category;
-
-  Expense.create({
+req.user.createExpense({
+  // Expense.create({
     amount: amount,
     description: description,
     category: category,
@@ -19,7 +19,8 @@ exports.postaddNew = (req, res, next) => {
 };
 
 exports.getEverything = (req, res, next) => {
-  Expense.findAll()
+  // Expense.findAll()
+  req.user.getExpenses()
     .then((data) => {
       res.json(data);
     })
