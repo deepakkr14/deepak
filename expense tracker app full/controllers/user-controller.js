@@ -1,6 +1,5 @@
-const bcrypt = require("bcryptjs/dist/bcrypt");
+const bcrypt = require("bcryptjs");
 const Users = require("../models/user-model");
-const hash = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secret="secretkey"
 exports.postaddNew = async (req, res, next) => {
@@ -45,7 +44,7 @@ exports.postlogin = async (req, res, next) => {
 
       if (passwordsMatch) {
 
-        jwt.sign({userId: user.id },secret,{expiresIn:'300s'},(err,token)=>{
+        jwt.sign({userId: user.id },secret,{expiresIn:'2h'},(err,token)=>{
           
              res.status(201).json({ message: "Login successful" ,token:token});
           

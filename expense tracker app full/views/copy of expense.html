@@ -13,16 +13,23 @@
     <title>Expense tracker</title>
 
     <title>Document</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
   </head>
 
   <body>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
+      src="https://checkout.razorpay.com/v1/checkout.js"
       integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <div style="margin-left: 200px; margin-right: 200px">
+    <div class="position-absolute top-2 end-0" id="premdiv">
+      <button class="btn btn-primary" id="premiumbtn">Buy Premium</button>
+    </div>
+    <div style="margin-left: 200px; margin-right: 250px;  margin-top:50px">
+      
       <form class="form-inline" id="forms" method="post">
         <label class="form-label" for="Amount">Expense Amount:</label>
         <input class="form-control" type="number" id="amount" />
