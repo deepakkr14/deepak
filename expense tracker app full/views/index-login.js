@@ -1,6 +1,6 @@
 let form = document.getElementById("form");
 const p = document.querySelector("#message");
-async function singup(event) {
+async function login(event) {
   event.preventDefault();
 
   let email = document.getElementById("email").value;
@@ -8,7 +8,6 @@ async function singup(event) {
 
   try {
     const response = await axios.post("http://localhost:3005/users/login", {
-      name,
       email,
       password,
     });

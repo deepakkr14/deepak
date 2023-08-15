@@ -7,6 +7,7 @@ const expenseController = require("../controllers/expense-controller");
 const router = express.Router();
 
 router.get("/getAll",authMiddle, expenseController.getEverything);
+router.get("/leaderboard",authMiddle, expenseController.getLeaderboard);
 
 router.post("/add",authMiddle, expenseController.postaddNew);
 router.get("/delete/:id",authMiddle, expenseController.getDelete);

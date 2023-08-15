@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
-const Users = require("../models/user-model");
 const jwt = require("jsonwebtoken");
+const Users = require('../models/user-model');
+
 const secret="secretkey"
 exports.postaddNew = async (req, res, next) => {
   const name = req.body.name;

@@ -1,4 +1,56 @@
 const Expense = require("../models/expense-model");
+const User = require('../models/user-model');
+// const Expense = require('../models/expense-model');
+const { Sequelize } = require('sequelize');
+
+// exports.getLeaderboard = async (req, res, next) => {
+//   try {
+//   const leaderboardData = await User.findAll({
+//       attributes: ['id', 'name', [Sequelize.fn('SUM', Sequelize.col('amount')), 'totalExpenses']],
+//       include: [
+//         {
+//           model: Expense,
+//           attributes: [], // Exclude the expense details, only need the sum
+//         },
+//       ],
+//       group: ['Users.id','Users.name'],
+//       order: [['totalExpenses', 'DESC']],
+//     });
+
+//     res.status(200).json(leaderboardData);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'An error occurred' });
+//   }
+// };
+exports.getLeaderboard = async (req, res, next) => {
+  try {
+    const leaderboard = await User.findAll({
+      attributes: [
+        'id',
+        'name',
+        [Sequelize.fn('sum', Sequelize.col('Expenses.amount')), 'total_expense'],
+      ],
+      include: [
+        {
+          model: Expense,
+          attributes: [],
+        },
+      ],
+      group: ['Users.id','Users.name'],
+      order: [['total_expense', 'DESC']],
+    });
+
+    res.status(200).json({
+      success: true,
+      data: leaderboard,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, error: error });
+  }
+};
+
 
 exports.postaddNew = (req, res, next) => {
   console.log(req.body + "controller ");
@@ -22,7 +74,8 @@ exports.getEverything = (req, res, next) => {
   // Expense.findAll()
   req.user.getExpenses()
     .then((data) => {
-      res.json(data);
+      console.log()
+      res.json({data:data,"premium":req.user.ispremiumuser});
     })
     .catch((err) => console.log(err));
 };

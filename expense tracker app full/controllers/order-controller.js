@@ -12,7 +12,7 @@ const amount = 2500;
 
 const createOrder = async (req, res) => {
   const options = {
-    amount: amount, // Amount in paise 
+    amount: amount, // Amount in paise
     currency: "INR",
     receipt: "order_receipt",
   };
@@ -28,9 +28,9 @@ const createOrder = async (req, res) => {
 
 const updateTransactionStatus = async (req, res ) => {
   try {
-      // const userId = req.user.id;
+      const userId = req.user.id;
       const { payment_id, order_id} = req.body;
-      console.log(order_id)
+      // console.log(order_id)
       const order  = await Order.findOne({where : {orderid : order_id}}) //2
       const promise1 =  order.update({ paymentid: payment_id, status: 'SUCCESSFUL'}) 
       const promise2 =  req.user.update({ ispremiumuser: true }) 

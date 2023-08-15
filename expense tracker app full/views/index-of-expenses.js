@@ -2,6 +2,38 @@ let form = document.getElementById("forms");
 let table = document.getElementById("table");
 let token = localStorage.getItem("token");
 let premiumBuy = document.querySelector("#premiumbtn");
+let leaderboardbtn = document.querySelector("#leader");
+let leaderboard_div = document.querySelector("#leaderboard");
+const ul = document.createElement("ul");
+
+if (premiumBuy.disabled == true) {
+  leaderboardbtn.setAttribute("disabled", "true");
+}
+leaderboardbtn.addEventListener("click", async function (e) {
+  e.preventDefault();
+  try {
+    const response = await axios.get("http://localhost:3005/leaderboard", {
+      headers: { authorization: token },
+    });
+    console.log(response);
+    if (response.data.data.length > 0) {
+      // leaderboard_div.innerHTML="";
+
+      response.data.data.forEach((data) => {
+        const li = document.createElement("li");
+        li.append(
+          document.createTextNode(
+            `Name: ${data.name} => Total Expense: ${data.total_expense}`
+          )
+        );
+        ul.appendChild(li);
+      });
+      leaderboard_div.appendChild(ul);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 premiumBuy.addEventListener("click", async function (e) {
   e.preventDefault();
@@ -11,13 +43,13 @@ premiumBuy.addEventListener("click", async function (e) {
   console.log(response);
 
   const options = {
-    "key": response.data.key_id,
-    "name": "D J Company",
-    "description": "test transaction",
+    key: response.data.key_id,
+    name: "D J Company",
+    description: "test transaction",
     // image:'https://png.pngtree.com/template/20201023/ourmid/pngtree-fitness-logo-with-letter-tg-icon-idea-of-logo-design-image_427180.jpg',
-    "order_id": response.data.order.id,
+    order_id: response.data.order.id,
     // handles successful payment
-    "handler": async function (response) {
+    handler: async function (response) {
       const update = await axios.post(
         `http://localhost:3005/update`,
         {
@@ -30,12 +62,7 @@ premiumBuy.addEventListener("click", async function (e) {
       );
 
       alert("You are a premium user now!");
-      // set new token to localStorage
-      if (localStorage.getItem("token") != update.token) {
-       
-        premiumBuy.innerHTML = "you are premium user";
-        premiumBuy.disabled = true;
-      }
+
       localStorage.setItem("token", update.data.token);
     },
     theme: {
@@ -108,15 +135,20 @@ async function showAllrecord() {
   const response = await axios.get("http://localhost:3005/getAll", {
     headers: { Authorization: token },
   });
-
+  console.log(response.data.data);
+  if (response.data.premium == true) {
+    premiumBuy.innerHTML = "you are premium user";
+    premiumBuy.disabled = true;
+  }
   tableBody.innerHTML = " ";
-  if (response.data.length == 0) {
+
+  if (response.data.data.length == 0) {
     let table_data_empty = document.createElement("td");
     table_data_empty.innerHTML = "No records found";
 
     tableBody.appendChild(table_data_empty);
   }
-  response.data.forEach((user) => {
+  response.data.data.forEach((user) => {
     let table_row = document.createElement("tr");
 
     let table_data_amt = document.createElement("td");
