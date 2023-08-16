@@ -6,9 +6,6 @@ let leaderboardbtn = document.querySelector("#leader");
 let leaderboard_div = document.querySelector("#leaderboard");
 const ul = document.createElement("ul");
 
-if (premiumBuy.disabled == true) {
-  leaderboardbtn.setAttribute("disabled", "true");
-}
 leaderboardbtn.addEventListener("click", async function (e) {
   e.preventDefault();
   try {
@@ -18,12 +15,12 @@ leaderboardbtn.addEventListener("click", async function (e) {
     console.log(response);
     if (response.data.data.length > 0) {
       // leaderboard_div.innerHTML="";
-
+console.log(response);
       response.data.data.forEach((data) => {
         const li = document.createElement("li");
         li.append(
           document.createTextNode(
-            `Name: ${data.name} => Total Expense: ${data.total_expense}`
+            `Name: ${data.name} => Total Expense: ${data.totalExpense}`
           )
         );
         ul.appendChild(li);
@@ -62,8 +59,8 @@ premiumBuy.addEventListener("click", async function (e) {
       );
 
       alert("You are a premium user now!");
-
-      localStorage.setItem("token", update.data.token);
+      window.location.reload();
+      // localStorage.setItem("token", update.data.token);
     },
     theme: {
       color: "#3399cc",
@@ -136,13 +133,19 @@ async function showAllrecord() {
     headers: { Authorization: token },
   });
   console.log(response.data.data);
+//  if(response.data.data=="nodata")
+
+
   if (response.data.premium == true) {
     premiumBuy.innerHTML = "you are premium user";
     premiumBuy.disabled = true;
   }
+  if (response.data.premium == false) {
+    leaderboardbtn.disabled = true;
+  }
   tableBody.innerHTML = " ";
 
-  if (response.data.data.length == 0) {
+  if (response.data.data.length == 0 || response.data.data=="nodata") {
     let table_data_empty = document.createElement("td");
     table_data_empty.innerHTML = "No records found";
 

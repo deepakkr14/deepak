@@ -47,6 +47,7 @@ Order.belongsTo(User);
 
 sequelize
   // .sync({force:true})
+  //  .sync({alter:true})
   .sync()
   .then((result) => {
     console.log("server started");
