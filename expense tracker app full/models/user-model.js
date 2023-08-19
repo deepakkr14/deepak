@@ -22,7 +22,7 @@ const User = sequelize.define("users", {
     allowNull: false,
   },
   totalExpense: {
-    type: Sequelize.DOUBLE,
+    type: Sequelize.INTEGER,
     allowNull: false,
     defaultValue: 0,
   },

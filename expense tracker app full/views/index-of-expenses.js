@@ -6,6 +6,58 @@ let leaderboardbtn = document.querySelector("#leader");
 let leaderboard_div = document.querySelector("#leaderboard");
 const ul = document.createElement("ul");
 
+// ADD AND EDIT FUNCTION
+
+form.addEventListener("submit", addItem);
+async function addItem(e) {
+  e.preventDefault();
+  const amount = document.getElementById("amount").value;
+  const description = document.getElementById("desc").value;
+  const category = document.getElementById("category").value;
+  const userId = document.getElementById("userId").value;
+
+  if (userId == "") {
+    try {
+      const response = await axios.post(
+        "http://localhost:3005/add",
+        {
+          amount: amount,
+          description: description,
+          category: category,
+        },
+        { headers: { authorization: token } }
+      )
+      console.log("New record Created"+response);
+      form.reset();
+      showAllrecord();
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    try {
+      const response = await axios.post(
+        "http://localhost:3005/edit",
+        {
+          userId,
+          amount,
+          description,
+          category,
+        },
+        { headers: { authorization: token } }
+      );
+      console.log("record Updated");
+      form.reset();
+      showAllrecord();
+    } catch (error) {
+      console.log(error);
+    }
+    document.getElementById("userId").value = "";
+  }
+  form.reset();
+  document.querySelector("#sub").value = "Add Expenses";
+}
+
+// LEADERBOARD FUNCTION
 leaderboardbtn.addEventListener("click", async function (e) {
   e.preventDefault();
   try {
@@ -31,7 +83,7 @@ console.log(response);
     console.log(error);
   }
 });
-
+// BUY PREMIUM BUTTON FUNCTION
 premiumBuy.addEventListener("click", async function (e) {
   e.preventDefault();
   const response = await axios.get("http://localhost:3005/getPremium", {
@@ -77,54 +129,7 @@ premiumBuy.addEventListener("click", async function (e) {
   });
 });
 
-form.addEventListener("submit", addItem);
-async function addItem(e) {
-  e.preventDefault();
-  const amount = document.getElementById("amount").value;
-  const description = document.getElementById("desc").value;
-  const category = document.getElementById("category").value;
-  const userId = document.getElementById("userId").value;
-
-  if (userId == "") {
-    try {
-      const response = await axios.post(
-        "http://localhost:3005/add",
-        {
-          amount: amount,
-          description: description,
-          category: category,
-        },
-        { headers: { authorization: token } }
-      );
-      console.log("New record Created");
-      form.reset();
-      showAllrecord();
-    } catch (error) {
-      console.log(error);
-    }
-  } else {
-    try {
-      const response = await axios.post(
-        "http://localhost:3005/edit",
-        {
-          userId,
-          amount,
-          description,
-          category,
-        },
-        { headers: { authorization: token } }
-      );
-      console.log("record Updated");
-      form.reset();
-      showAllrecord();
-    } catch (error) {
-      console.log(error);
-    }
-    document.getElementById("userId").value = "";
-  }
-  form.reset();
-  document.querySelector("#sub").value = "Add Expenses";
-}
+// SHOW ALL RECORD FUNCTION
 document.addEventListener("DOMContentLoaded", showAllrecord());
 async function showAllrecord() {
   let tableBody = document.getElementById("tableBody");
@@ -132,7 +137,7 @@ async function showAllrecord() {
   const response = await axios.get("http://localhost:3005/getAll", {
     headers: { Authorization: token },
   });
-  console.log(response.data.data);
+  // console.log(response);
 //  if(response.data.data=="nodata")
 
 
@@ -145,7 +150,7 @@ async function showAllrecord() {
   }
   tableBody.innerHTML = " ";
 
-  if (response.data.data.length == 0 || response.data.data=="nodata") {
+  if (response.data.data.length == 0 ) {
     let table_data_empty = document.createElement("td");
     table_data_empty.innerHTML = "No records found";
 

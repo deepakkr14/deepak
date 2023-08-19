@@ -28,15 +28,3 @@ async function singup(event) {
   }
 }
 
-// async function deleteAppointment(id) {
-//   try {
-//     const res = await axios.get("http://localhost:3002/delete/" + id);
-//     ul1.innerHTML = " ";
-//     ul2.innerHTML = " ";
-//     ul3.innerHTML = " ";
-//     ul4.innerHTML = " ";
-//     showTables();
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }

@@ -1,6 +1,6 @@
 const User = require("../models/user-model");
 const Expense = require("../models/expense-model");
-const Sequelize = require("sequelize");
+const sequelize = require("../util/database");
 
 exports.getLeaderboard = async (req, res, next) => {
   try {
@@ -19,64 +19,82 @@ exports.getLeaderboard = async (req, res, next) => {
   }
 };
 
-exports.postaddNew = (req, res, next) => {
+exports.postaddNew = async (req, res, next) => {
+  const t = await sequelize.transaction();
   const amount = req.body.amount;
   const description = req.body.description;
   const category = req.body.category;
-
-  req.user
-    .createExpense({
-      // Expense.create({
-      amount: amount,
-      description: description,
-      category: category,
-    })
-    .then((result) => {
-      const updatedTotalExpense = req.user.totalExpense + Number(amount);
-      req.user.update({ totalExpense: updatedTotalExpense });
-
-      console.log("Appointment Created");
-      res.json(result);
-    })
-    .catch((err) => console.log(err));
-};
-
-exports.getEverything = (req, res, next) => {
-  // Expense.findAll()
-  req.user
-    .getExpenses()
-    .then((data) => {
-      if (data == null) {
-        res.json({ data: "nodata", premium: req.user.ispremiumuser });
-      }
-      console.log();
-      res.json({ data: data, premium: req.user.ispremiumuser });
-    })
-    .catch((err) => console.log(err));
-};
-exports.getDelete = async (req, res, next) => {
-  let id = req.params.id;
   try {
-    const expense = await Expense.findByPk(id);
-    const previousPrice = expense.amount;
-    const result = await expense.destroy();
+    const expense = await req.user.createExpense(
+      {
+        // Expense.create({
+        amount: amount,
+        description: description,
+        category: category,
+      },
+      { transaction: t }
+    );
 
-    // updating total expense of user table
-    const updatedTotalExpense = req.user.totalExpense - Number(previousPrice);
-    await req.user.update({ totalExpense: updatedTotalExpense });
+    const updatedTotalExpense = req.user.totalExpense + Number(amount);
 
-    console.log(`deleted ${id}`);
-    res.json({ success: true, data: {} });
+    await req.user.update(
+      { totalExpense: updatedTotalExpense },
+      { transaction: t }
+    );
+    await t.commit();
+    console.log("Expense added");
+    res.status(200).json(expense);
+  } catch {
+    // )
+    (err) => {
+      t.rollback();
+      console.log(err);
+    };
+  }
+};
+// }
+exports.getEverything = async (req, res, next) => {
+  // Expense.findAll()
+  try {
+    const data = await req.user.getExpenses();
+
+    res.json({ data: data, premium: req.user.ispremiumuser });
   } catch {
     (err) => console.log(err);
   }
 };
+
+exports.getDelete = async (req, res, next) => {
+  const t = await sequelize.transaction();
+  let id = req.params.id;
+  try {
+    const expense = await Expense.findByPk(id);
+    const previousPrice = expense.amount;
+    // const result = await expense.destroy();
+    const result = await expense.destroy({ transaction: t });
+    // updating total expense of user table
+    const updatedTotalExpense = req.user.totalExpense - Number(previousPrice);
+
+    await req.user.update(
+      { totalExpense: updatedTotalExpense },
+      { transaction: t }
+    );
+    await t.commit();
+    console.log(`deleted ${id}`);
+    res.json({ success: true, data: {} });
+  } catch {
+    (err) => {
+      t.rollback();
+      console.log(err);
+    };
+  }
+};
 exports.postEdit = async (req, res, next) => {
+  const t = await sequelize.transaction();
   const id = req.body.userId;
   const amount = Number(req.body.amount);
   const description = req.body.description;
   const category = req.body.category;
-  console.log(req.body);
   try {
     const expense = await Expense.findByPk(id);
     const previousPrice = expense.amount;
@@ -84,13 +102,19 @@ exports.postEdit = async (req, res, next) => {
     expense.description = description;
     expense.category = category;
 
-    const updatedExpense = await expense.save();
+    const updatedExpense = await expense.save({ transaction: t });
     const updatedTotalExpense =
       req.user.totalExpense - Number(previousPrice) + Number(amount);
-    await req.user.update({ totalExpense: updatedTotalExpense });
+
+    await req.user.update(
+      { totalExpense: updatedTotalExpense },
+      { transaction: t }
+    );
+    await t.commit();
     console.log("Record Updated");
     res.json(updatedExpense);
   } catch (error) {
+    await t.rollback();
     console.log(error);
   }
 };
