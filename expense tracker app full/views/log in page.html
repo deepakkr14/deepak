@@ -15,21 +15,40 @@
   <body>
     <div class="container">
       <form onsubmit="login(event)" id="form">
-
-        <label for="email">Enter Your Email</label>
-        <input type="text" id="email" value="deepak123@gmail.com" required />
-
-        <label for="password">Enter your passowrd</label>
+        <label class="form-label" for="email">Enter Your Email:</label>
         <input
+          class="form-control"
+          type="text"
+          id="email"
+          value="deepak123@gmail.com"
+          required
+        />
+
+        <label class="form-label mt-2" for="password"
+          >Enter your passowrd:</label
+        >
+        <input
+          class="form-control"
           type="password"
           id="password"
           name="passowrd"
           value="7875487"
           required
         />
-        <button type="submit">Log in</button>
-        <br />
-        <a href="./sign up page.html">new user</a>
+        <button class="btn btn-primary mt-2" type="submit">Log in</button>
+        <div>
+          <a
+            href="./forget password.html"
+            class="btn btn-secondary mt-2 mr-6"
+            target="_parent"
+            >Forgot password</a
+          >
+        </div>
+
+        <!-- <a href="./sign up page.html"><button>yoyoy</button></a> id="forgetbtn">
+          forgot password -->
+
+        <br /><a href="./sign up page.html">new user</a>
       </form>
     </div>
     <script src="index-login.js"></script>
