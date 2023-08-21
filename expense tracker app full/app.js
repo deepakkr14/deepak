@@ -10,10 +10,13 @@ const bcrypt = require("bcryptjs");
 
 const jwt = require("jsonwebtoken");
 
+const uuid=require("uuid")
+
 const sequelize = require("./util/database");
 
 const app = express();
 const dotenv = require("dotenv");
+
 
 require("dotenv").config({ path: "./config.env" });
 app.use(cors());
@@ -44,6 +47,9 @@ Expense.belongsTo(User);
 
 User.hasMany(Order);
 Order.belongsTo(User);
+
+User.hasMany(Password);
+Password.belongsTo(User);
 
 sequelize
   // .sync({force:true})
