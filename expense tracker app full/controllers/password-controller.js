@@ -58,8 +58,8 @@ exports.postPasswordReset = async (req, res, next) => {
   console.log(ui);
 
   const found = await Password.findOne({ where: { id: ui, isActive: true } });
-
-  await found.update({ isActive: false });
+if(!found){res.send("reset password link is expired")}
+ else{ await found.update({ isActive: false });
 
   res.status(200).send(`<!DOCTYPE html>
   <html lang="en">
@@ -142,7 +142,7 @@ exports.postPasswordReset = async (req, res, next) => {
   </html>
   `);
 
-  res.end();
+  res.end();}
 };
 
 exports.postPasswordUpdate = async (req, res, next) => {
