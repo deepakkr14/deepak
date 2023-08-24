@@ -1,7 +1,45 @@
 const User = require("../models/user-model");
+const Download = require("../models/downloads-model");
 const Expense = require("../models/expense-model");
 const sequelize = require("../util/database");
 
+
+const Userservices=require('../services/userservices')
+const S3services=require('../services/s3services')
+
+exports.getLinks=async(req,res)=>{
+try{
+  let userid= req.user.id;
+  let data=await  req.user.getDownloads()
+  res.status(200).json(data)
+  console.log(userdata)
+}
+catch{err=>console.log(err)}
+}
+exports.getDownload = async (req, res) => {
+  try {
+    const expenses = await Userservices.getExpenses(req)
+    const stringExpenses = JSON.stringify(expenses);
+    const userId = req.user.id;
+    const filename = `expense${userId}/${new Date()}.txt`;
+
+    const fileURL = await S3services.uploadToS3(stringExpenses, filename);
+    console.log(fileURL);
+
+    const encodedDateString = fileURL.split('/').pop().replace('.txt', '');
+    const decodedDateString = decodeURIComponent(encodedDateString);
+    const parsedDate = new Date(decodedDateString);
+    const options = {year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+    const formattedDate = parsedDate.toLocaleDateString('en-US', options);
+
+
+
+    req.user.createDownload({date:formattedDate,fileUrl:fileURL})
+    res.status(200).json({fileURL, success: true});
+  } catch (err) {
+    res.status(401).send("Error while downloading the files");
+  }
+};
 exports.getLeaderboard = async (req, res, next) => {
   try {
     const leaderboard = await User.findAll({
@@ -118,3 +156,5 @@ exports.postEdit = async (req, res, next) => {
     console.log(error);
   }
 };
+
+

@@ -12,5 +12,6 @@ router.get("/user/download",authMiddle, expenseController.getDownload);
 router.post("/add",authMiddle, expenseController.postaddNew);
 router.get("/delete/:id",authMiddle, expenseController.getDelete);
 router.post("/edit", authMiddle,expenseController.postEdit);
+router.get("/getlinks", authMiddle,expenseController.getLinks);
 
 module.exports = router;

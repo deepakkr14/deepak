@@ -4,8 +4,34 @@ let token = localStorage.getItem("token");
 let premiumBuy = document.querySelector("#premiumbtn");
 let leaderboardbtn = document.querySelector("#leader");
 let leaderboard_div = document.querySelector("#leaderboard");
+let downloadbtn = document.getElementById("download");
+let downloadtable = document.getElementById("downloadTable");
+let downloadtableBody = document.getElementById("downloadTableBody");
 const ul = document.createElement("ul");
 
+// DOWNLOAD REPORT BUTTON FUNCTION
+downloadbtn.addEventListener("click", async function (e) {
+  e.preventDefault();
+  try {
+    const response = await axios.get("http://localhost:3005/user/download", {
+      headers: { authorization: token },
+    });
+
+    if (response.status === 200) {
+      console.log(response.data);
+      var a = document.createElement("a");
+      a.href = response.data.fileURL;
+      a.download = "myexpenses.txt";
+      a.click();
+    } else {
+      throw new Error(response.data.message);
+    }
+  } catch {
+    (err) => {
+      console.log("error", err);
+    };
+  }
+});
 // ADD AND EDIT FUNCTION
 
 form.addEventListener("submit", addItem);
@@ -26,8 +52,8 @@ async function addItem(e) {
           category: category,
         },
         { headers: { authorization: token } }
-      )
-      console.log("New record Created"+response);
+      );
+      console.log("New record Created" + response);
       form.reset();
       showAllrecord();
     } catch (error) {
@@ -64,10 +90,10 @@ leaderboardbtn.addEventListener("click", async function (e) {
     const response = await axios.get("http://localhost:3005/leaderboard", {
       headers: { authorization: token },
     });
-    console.log(response);
+
     if (response.data.data.length > 0) {
       // leaderboard_div.innerHTML="";
-console.log(response);
+
       response.data.data.forEach((data) => {
         const li = document.createElement("li");
         li.append(
@@ -133,24 +159,51 @@ premiumBuy.addEventListener("click", async function (e) {
 document.addEventListener("DOMContentLoaded", showAllrecord());
 async function showAllrecord() {
   let tableBody = document.getElementById("tableBody");
-  // console.log(token)
+
   const response = await axios.get("http://localhost:3005/getAll", {
     headers: { Authorization: token },
   });
-  // console.log(response);
-//  if(response.data.data=="nodata")
 
-
+  // BUTTON SWITCHING
   if (response.data.premium == true) {
     premiumBuy.innerHTML = "you are premium user";
     premiumBuy.disabled = true;
+    downloadbtn.disabled = false;
+    leaderboardbtn.disabled = false;
+
+    
+      const downloadres = await axios.get("http://localhost:3005/getlinks", {
+        headers: { Authorization: token },
+      });
+      downloadtableBody.innerHTML = "";
+    
+      if (downloadres.data.length == 0) {
+        let table_row = document.createElement("tr");
+    
+        let table_data_date = document.createElement("td");
+        table_data_date.innerHTML = "no Previous downloads";
+        table_row.appendChild(table_data_date);
+        downloadtableBody.appendChild(table_row);
+      }
+    
+      for (let i of downloadres.data) {
+        let table_row = document.createElement("tr");
+    
+        let table_data_date = document.createElement("td");
+        table_data_date.innerHTML = i.date;
+        table_row.appendChild(table_data_date);
+    
+        let table_data_link = document.createElement("td");
+        table_data_link.innerHTML = `<a href=${i.fileUrl}>download</a>`;
+        table_row.appendChild(table_data_link);
+    
+        downloadtableBody.appendChild(table_row);
+      }
   }
-  if (response.data.premium == false) {
-    leaderboardbtn.disabled = true;
-  }
+
   tableBody.innerHTML = " ";
 
-  if (response.data.data.length == 0 ) {
+  if (response.data.data.length == 0) {
     let table_data_empty = document.createElement("td");
     table_data_empty.innerHTML = "No records found";
 

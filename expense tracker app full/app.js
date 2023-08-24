@@ -32,7 +32,8 @@ const Expense = require("./models/expense-model");
 const User = require("./models/user-model");
 const Order = require("./models/order-model");
 const Password = require("./models/password-model");
-// const { default: orders } = require("razorpay/dist/types/orders");
+const Download=require("./models/downloads-model");
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -51,6 +52,8 @@ Order.belongsTo(User);
 User.hasMany(Password);
 Password.belongsTo(User);
 
+User.hasMany(Download);
+Download.belongsTo(User)
 sequelize
   // .sync({force:true})
   //  .sync({alter:true})

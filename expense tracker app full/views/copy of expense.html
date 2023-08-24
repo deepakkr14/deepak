@@ -59,14 +59,42 @@
           class="btn btn-success mt-4"
           value="View Leaderboard"
           id="leader"
+          disabled="true"
         />
         <input
           type="button"
           class="btn btn-primary mt-4"
-          value="Download report"
+          value="Download latest report"
           id="download"
+          disabled="true"
+        
         />
         <br />
+        <h1>Previous downloads</h1>
+        <table class="table table-bordered" id="downloadTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>links to download</th>
+            </tr>
+          </thead>
+          <tbody id="downloadTableBody">
+            <!-- <tr>
+              <td>no Previous downloads</td>
+               
+               </tr> -->
+
+            <!-- <tr>
+              <td> 12 aug ii</td>
+               <td><a href="https://www.google.com">download</a></td>
+               </tr>
+            <tr>
+              <td> 19 aug ii</td>
+               <td><a href="https://www.bing.com">download</a></td>
+               </tr> -->
+
+          </tbody>
+        </table>
       </form>
       <!-- <ul id="leaderboard"></ul> -->
       <div class="container" id="leaderboard"></div>
