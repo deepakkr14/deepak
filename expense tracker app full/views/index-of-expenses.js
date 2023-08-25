@@ -7,7 +7,9 @@ let leaderboard_div = document.querySelector("#leaderboard");
 let downloadbtn = document.getElementById("download");
 let downloadtable = document.getElementById("downloadTable");
 let downloadtableBody = document.getElementById("downloadTableBody");
+let pagination = document.getElementById("pagination");
 const ul = document.createElement("ul");
+let page = 1;
 
 // DOWNLOAD REPORT BUTTON FUNCTION
 downloadbtn.addEventListener("click", async function (e) {
@@ -156,60 +158,92 @@ premiumBuy.addEventListener("click", async function (e) {
 });
 
 // SHOW ALL RECORD FUNCTION
-document.addEventListener("DOMContentLoaded", showAllrecord());
-async function showAllrecord() {
+
+document.addEventListener("DOMContentLoaded", showAllrecord(page));
+async function showAllrecord(page) {
   let tableBody = document.getElementById("tableBody");
 
-  const response = await axios.get("http://localhost:3005/getAll", {
+  // const response = await axios.get("http://localhost:3005/getAll", {
+  //   headers: { Authorization: token },
+  // });
+  const pagedata = await axios.get(`http://localhost:3005/page/${page}`, {
     headers: { Authorization: token },
   });
-
   // BUTTON SWITCHING
-  if (response.data.premium == true) {
+  if (pagedata.data.premium == true) {
     premiumBuy.innerHTML = "you are premium user";
     premiumBuy.disabled = true;
     downloadbtn.disabled = false;
     leaderboardbtn.disabled = false;
 
-    
-      const downloadres = await axios.get("http://localhost:3005/getlinks", {
-        headers: { Authorization: token },
-      });
-      downloadtableBody.innerHTML = "";
-    
-      if (downloadres.data.length == 0) {
-        let table_row = document.createElement("tr");
-    
-        let table_data_date = document.createElement("td");
-        table_data_date.innerHTML = "no Previous downloads";
-        table_row.appendChild(table_data_date);
-        downloadtableBody.appendChild(table_row);
-      }
-    
-      for (let i of downloadres.data) {
-        let table_row = document.createElement("tr");
-    
-        let table_data_date = document.createElement("td");
-        table_data_date.innerHTML = i.date;
-        table_row.appendChild(table_data_date);
-    
-        let table_data_link = document.createElement("td");
-        table_data_link.innerHTML = `<a href=${i.fileUrl}>download</a>`;
-        table_row.appendChild(table_data_link);
-    
-        downloadtableBody.appendChild(table_row);
-      }
+    const downloadres = await axios.get("http://localhost:3005/getlinks", {
+      headers: { Authorization: token },
+    });
+    downloadtableBody.innerHTML = "";
+
+    if (downloadres.data.length == 0) {
+      let table_row = document.createElement("tr");
+
+      let table_data_date = document.createElement("td");
+      table_data_date.innerHTML = "no Previous downloads";
+      table_row.appendChild(table_data_date);
+      downloadtableBody.appendChild(table_row);
+    }
+
+    for (let i of downloadres.data) {
+      let table_row = document.createElement("tr");
+
+      let table_data_date = document.createElement("td");
+      table_data_date.innerHTML = i.date;
+      table_row.appendChild(table_data_date);
+
+      let table_data_link = document.createElement("td");
+      table_data_link.innerHTML = `<a href=${i.fileUrl}>download</a>`;
+      table_row.appendChild(table_data_link);
+
+      downloadtableBody.appendChild(table_row);
+    }
   }
 
   tableBody.innerHTML = " ";
+  pagination.innerHTML = " ";
+  console.log(pagedata);
 
-  if (response.data.data.length == 0) {
+  let button1 = document.createElement("button");
+  button1.classList = "btn";
+  button1.innerText = pagedata.data.previousPage;
+  pagination.appendChild(button1);
+
+  let button2 = document.createElement("button");
+  button2.classList = "btn";
+  button2.classList = "active";
+  button2.innerText = pagedata.data.currentPage;
+
+  pagination.appendChild(button2);
+  let button3 = document.createElement("button");
+  button3.classList = "btn";
+  button3.innerText = pagedata.data.nextPage;
+  pagination.appendChild(button3);
+
+  button1.addEventListener("click", () => {
+    showAllrecord(pagedata.data.previousPage);
+  });
+
+  button2.addEventListener("click", () => {
+    showAllrecord(pagedata.data.currentPage);
+  });
+
+  button3.addEventListener("click", () => {
+    showAllrecord(pagedata.data.nextPage);
+  });
+
+  if (pagedata.data.expenses.length == 0) {
     let table_data_empty = document.createElement("td");
     table_data_empty.innerHTML = "No records found";
 
     tableBody.appendChild(table_data_empty);
   }
-  response.data.data.forEach((user) => {
+  pagedata.data.expenses.forEach((user) => {
     let table_row = document.createElement("tr");
 
     let table_data_amt = document.createElement("td");
@@ -254,6 +288,7 @@ async function showAllrecord() {
       document.querySelector("#sub").value = "edit";
     };
   });
+  let curpage = 1;
 }
 
 async function deleteRecord(id) {
