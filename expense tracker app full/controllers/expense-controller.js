@@ -9,12 +9,13 @@ const S3services = require("../services/s3services");
 exports.getPage = async (req, res) => {
   try {
     let page = Number(req.params.no); //1
-    const itemsPerPage = 2;
+let limits=Number(req.params.limit);
+
+   let itemsPerPage = limits;
     const totalData = await Expense.count();
     const ispremiumuser=await req.user.ispremiumuser;
-    
     const expenses = await req.user.getExpenses({
-      limit: 2, // Number of items per page
+      limit: limits, // Number of items per page
       offset: (page - 1) * itemsPerPage,
     });
     const totalPages = Math.ceil(totalData / itemsPerPage);
@@ -131,14 +132,14 @@ exports.postaddNew = async (req, res, next) => {
     console.log("Expense added");
     res.status(200).json(expense);
   } catch {
-    // )
+   
     (err) => {
       t.rollback();
       console.log(err);
     };
   }
 };
-// }
+
 exports.getEverything = async (req, res, next) => {
   // Expense.findAll()
   try {

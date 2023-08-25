@@ -13,6 +13,6 @@ router.post("/add",authMiddle, expenseController.postaddNew);
 router.get("/delete/:id",authMiddle, expenseController.getDelete);
 router.post("/edit", authMiddle,expenseController.postEdit);
 router.get("/getlinks", authMiddle,expenseController.getLinks);
-router.get("/page/:no", authMiddle,expenseController.getPage);
+router.get("/page/:no/:limit", authMiddle,expenseController.getPage);
 
 module.exports = router;

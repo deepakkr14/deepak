@@ -10,6 +10,7 @@ let downloadtableBody = document.getElementById("downloadTableBody");
 let pagination = document.getElementById("pagination");
 const ul = document.createElement("ul");
 let page = 1;
+// let pageLimit=document.getElementById("pageLimit")
 
 // DOWNLOAD REPORT BUTTON FUNCTION
 downloadbtn.addEventListener("click", async function (e) {
@@ -25,6 +26,7 @@ downloadbtn.addEventListener("click", async function (e) {
       a.href = response.data.fileURL;
       a.download = "myexpenses.txt";
       a.click();
+      showAllrecord(page) 
     } else {
       throw new Error(response.data.message);
     }
@@ -57,7 +59,7 @@ async function addItem(e) {
       );
       console.log("New record Created" + response);
       form.reset();
-      showAllrecord();
+      showAllrecord(page);
     } catch (error) {
       console.log(error);
     }
@@ -75,7 +77,7 @@ async function addItem(e) {
       );
       console.log("record Updated");
       form.reset();
-      showAllrecord();
+      showAllrecord(page);
     } catch (error) {
       console.log(error);
     }
@@ -162,12 +164,15 @@ premiumBuy.addEventListener("click", async function (e) {
 document.addEventListener("DOMContentLoaded", showAllrecord(page));
 async function showAllrecord(page) {
   let tableBody = document.getElementById("tableBody");
+ localStorage.setItem("pageLimit",document.getElementById("pageLimit").value)
 
+ let limits=localStorage.getItem("pageLimit")
   // const response = await axios.get("http://localhost:3005/getAll", {
   //   headers: { Authorization: token },
   // });
-  const pagedata = await axios.get(`http://localhost:3005/page/${page}`, {
+  const pagedata = await axios.get(`http://localhost:3005/page/${page}/${limits}`, {
     headers: { Authorization: token },
+   
   });
   // BUTTON SWITCHING
   if (pagedata.data.premium == true) {
@@ -297,7 +302,7 @@ async function deleteRecord(id) {
       headers: { authorization: token },
     });
     tableBody.innerHTML = " ";
-    showAllrecord();
+    showAllrecord(page);
   } catch (error) {
     console.log(error);
   }
