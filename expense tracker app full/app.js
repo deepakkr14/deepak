@@ -1,5 +1,6 @@
 const path = require("path");
-
+const fs=require("fs")
+const Port=process.env.PORT
 const express = require("express");
 
 const bodyParser = require("body-parser");
@@ -14,13 +15,16 @@ const uuid=require("uuid")
 
 const sequelize = require("./util/database");
 
+const helmet= require("helmet")
+const morgan= require("morgan")
 const app = express();
 const dotenv = require("dotenv");
 
-
+const accessLogStream=fs.createWriteStream(path.join(__dirname,'accessLog'),{flags:"a"})
 require("dotenv").config({ path: "./config.env" });
 app.use(cors());
-
+app.use(helmet());
+app.use(morgan("combined",{stream:accessLogStream}));
 app.use(express.json());
 
 const Uroutes = require("./routes/user-routes");
@@ -33,6 +37,7 @@ const User = require("./models/user-model");
 const Order = require("./models/order-model");
 const Password = require("./models/password-model");
 const Download=require("./models/downloads-model");
+const { Stream } = require("stream");
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -59,8 +64,8 @@ sequelize
   //  .sync({alter:true})
   .sync()
   .then((result) => {
-    console.log("server started");
+    console.log("server started on "+ process.env.PORT);
 
-    app.listen(3005);
+    app.listen(process.env.PORT);
   })
   .catch((err) => console.log(err));

@@ -8,12 +8,12 @@ const authenticate = async (req, res, next) => {
   
     const user = jwt.verify(token, secretKey);
     await User.findByPk(user.userId).then((user) => {
-      // console.log(JSON.stringify(user));
+      
       req.user = user;
       next();
     });
   } catch (err) {
-    console.log(err + "   ye wala auth ka error hai");
+    console.log(err);
     return res.status(401).json({ success: false });
   }
 };

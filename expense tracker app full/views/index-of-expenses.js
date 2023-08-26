@@ -8,9 +8,9 @@ let downloadbtn = document.getElementById("download");
 let downloadtable = document.getElementById("downloadTable");
 let downloadtableBody = document.getElementById("downloadTableBody");
 let pagination = document.getElementById("pagination");
-const ul = document.createElement("ul");
-let page = 1;
 // let pageLimit=document.getElementById("pageLimit")
+
+let page = 1;
 
 // DOWNLOAD REPORT BUTTON FUNCTION
 downloadbtn.addEventListener("click", async function (e) {
@@ -94,11 +94,18 @@ leaderboardbtn.addEventListener("click", async function (e) {
     const response = await axios.get("http://localhost:3005/leaderboard", {
       headers: { authorization: token },
     });
-
+    leaderboard_div.innerHTML=""
+    const ul = document.createElement("ul");
+    const h1=document.createElement('h1');
+    h1.textContent=`leaderboard`;
+    ul.appendChild(h1);
     if (response.data.data.length > 0) {
-      // leaderboard_div.innerHTML="";
 
       response.data.data.forEach((data) => {
+        // const p=document.createElement('p');
+        // p.textContent=
+        // ul.appendChild(p);
+        
         const li = document.createElement("li");
         li.append(
           document.createTextNode(
@@ -160,12 +167,16 @@ premiumBuy.addEventListener("click", async function (e) {
 });
 
 // SHOW ALL RECORD FUNCTION
-
+pageLimit.addEventListener("change", async function () {
+  const selectedValue = pageLimit.value;
+  localStorage.setItem("pageLimit", selectedValue);
+});
 document.addEventListener("DOMContentLoaded", showAllrecord(page));
 async function showAllrecord(page) {
   let tableBody = document.getElementById("tableBody");
- localStorage.setItem("pageLimit",document.getElementById("pageLimit").value)
+//  localStorage.setItem("pageLimit",document.getElementById("pageLimit").value)
 
+ 
  let limits=localStorage.getItem("pageLimit")
   // const response = await axios.get("http://localhost:3005/getAll", {
   //   headers: { Authorization: token },
@@ -174,6 +185,7 @@ async function showAllrecord(page) {
     headers: { Authorization: token },
    
   });
+  
   // BUTTON SWITCHING
   if (pagedata.data.premium == true) {
     premiumBuy.innerHTML = "you are premium user";

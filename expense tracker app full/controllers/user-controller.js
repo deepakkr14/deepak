@@ -50,15 +50,14 @@ exports.postlogin = async (req, res, next) => {
              res.status(201).json({ message: "Login successful" ,token:token});
           
         })
-        // Correct password, login successful
        
-        // redirect("./user/login.html");
+       
       } else {
-        // Incorrect password, user not authorized
-        res.status(401).json({ message: "User not authorized" });
+       
+        res.status(401).json({ message: "Incorrect password ! User not authorized" });
       }
     } else {
-      // User not found
+     
       res.status(404).json({ message: "User not found" });
     }
   } catch (err) {
